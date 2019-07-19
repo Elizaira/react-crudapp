@@ -8,10 +8,15 @@ import axios from 'axios';
     constructor(props) {
       super(props);
       this.state = {employees: []};
-
-
+      
+      // this.onDelete = this.onDelete.bind(this);
     }
+
     componentDidMount() {
+      this.getAllEmployees();
+    }
+
+    getAllEmployees() {
       try {
         axios({
           method: 'get',
@@ -26,6 +31,21 @@ import axios from 'axios';
         });
       } catch (err){
         console.log('Error on fetching all employee details');
+        console.log(err);
+      }
+    }
+    deleteEmployeeById(id) {
+      try {
+        axios({
+          method: 'delete',
+          url:`http://dummy.restapiexample.com/api/v1/delete/${id}`
+        }).then(response => {
+          console.log('Delete employee data');
+          console.log(response.data);
+          this.getAllEmployees();
+        });
+      } catch (err) {
+        console.log('Error on deleting selected employee data');
         console.log(err);
       }
     }
@@ -50,6 +70,16 @@ import axios from 'axios';
                       <td>{employees.employee_name}</td>
                       <td>{employees.employee_age}</td>
                       <td>{employees.employee_salary}</td>
+                      <td>
+                         
+                        <button className='button-delete'
+                          onClick={() => this.deleteEmployeeById(employees.id)}
+                          //function for delete single row employee data no need for this.onDelete in the upper part
+                        >
+                        Delete
+                        </button>
+                        <button>Edit</button>
+                      </td>
                     </tr>
                   ))
                 }
@@ -63,3 +93,6 @@ import axios from 'axios';
   }
 
 export default App;
+
+
+  
